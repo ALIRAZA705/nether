@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "48245803553",
+    "firebase_url": "https://newguilogin.firebaseio.com",
+    "project_id": "newguilogin",
+    "storage_bucket": "newguilogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48245803553:android:fce92e2636556f934d7160",
+        "android_client_info": {
+          "package_name": "com.monstertechno.loginsignupui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48245803553-gnfhh2f575isa1slhecuofer303j7532.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monstertechno.loginsignupui",
+            "certificate_hash": "6c2c8024ca56d57e5a0428632cd9c937e1e5321d"
+          }
+        },
+        {
+          "client_id": "48245803553-hdoevgujja5tgo01inan84c5ok6l4g3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monstertechno.loginsignupui",
+            "certificate_hash": "c64f668f8453693c2be5a672b5c884922171c212"
+          }
+        },
+        {
+          "client_id": "48245803553-i56g5u6sf8gsumif5ephart92emifjfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_1i-fjE8jH9qFkfToBrmj6FgAomCvUhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48245803553-i56g5u6sf8gsumif5ephart92emifjfk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
