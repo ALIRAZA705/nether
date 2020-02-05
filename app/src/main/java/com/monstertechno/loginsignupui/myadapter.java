@@ -43,7 +43,7 @@ public class myadapter extends  RecyclerView.Adapter<myholder>{
 //        model m1=new model();
         holder.tx.setText(modl.get(position).getTicket_no());
         holder.tx2.setText(modl.get(position).getLocation());
-        holder.tx3.setText(modl.get(position).getDetails());
+//        holder.tx3.setText(modl.get(position).getDetails());
 holder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -53,7 +53,9 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
             Intent intent=new Intent(v.getContext(),homeActivity.class);
 
             intent.putExtra("ticket no" ,holder.tx.getText());
-            intent.putExtra("details",holder.tx3.getText());
+            intent.putExtra("contact",modl.get(position).getContact_person());
+        intent.putExtra("address",modl.get(position).getAddress());
+        intent.putExtra("details",modl.get(position).getDetails());
 //        Log.v("ali","deta " +holder)
         v.getContext().startActivity(intent);
 //        startActivity(new Intent(myadapter.this,homac.class));

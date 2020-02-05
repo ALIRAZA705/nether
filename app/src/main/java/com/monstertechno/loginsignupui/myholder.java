@@ -12,6 +12,6 @@ public class myholder extends RecyclerView.ViewHolder {
         super(itemView);
         this.tx= itemView.findViewById(R.id.tx1);
         this.tx2= itemView.findViewById(R.id.tx2);
-        this.tx3= itemView.findViewById(R.id.details);
+//        this.tx3= itemView.findViewById(R.id.details);
     }
 }

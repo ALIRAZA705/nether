@@ -48,7 +48,7 @@ public class homeActivity extends AppCompatActivity {
 
     private  final long Min_time =1000;
     private final long Min_distance=5;
-    public  String DET;
+    public  String DET,contact,add;
     private List<String> listDataHeader;
     private HashMap<String,List<String>> listHash;
     public int currentimages;
@@ -58,6 +58,7 @@ public class homeActivity extends AppCompatActivity {
     public  int variable_no,variable_yes;
     int[] images={R.drawable.beforetravel,R.drawable.duringtravelliing,R.drawable.beforetask,R.drawable.duringtask};
     Button starttravel,starttask;
+    Fragment f;
     ImageView starttravelimge,starttaskimage;
     public static FragmentManager fm;
 //    FragmentTransaction ft;
@@ -78,7 +79,7 @@ public static  FragmentTransaction ft;
 
         ////////////////////////////////////
         tickettx=findViewById(R.id.tx);
-        tickettx1=findViewById(R.id.de);
+//        tickettx1=findViewById(R.id.de);
         textView=findViewById(R.id.tx1);
         textView1=findViewById(R.id.tx2);
         Intent i=getIntent();
@@ -86,8 +87,12 @@ public static  FragmentTransaction ft;
 //        String ticketno1= i.getStringExtra("ticket no");
          DET= i.getStringExtra("details");
          Log.v("ali","det " +DET);
+        contact= i.getStringExtra("contact");
+        Log.v("ali","contact " +contact);
+        add= i.getStringExtra("address");
+        Log.v("ali","contact " +add);
         tickettx.setText(ticketno1);
-        tickettx1.setText(DET);
+//        tickettx1.setText(DET);
         listView =  findViewById(R.id.exp);
         init();
         listdataadapter= new expandablelist(this,listDataHeader,listHash);
@@ -113,12 +118,14 @@ public static  FragmentTransaction ft;
         Log.v("ali","det " +emdtdev.get(0));
 
         List<String> androidstudio =new ArrayList<>();
-        androidstudio.add("Muhammad Fasial" );
-        androidstudio.add("Director Customer Support");
-        androidstudio.add("muhammad.faisal@abc.com");
-        androidstudio.add("+92-300-745-4342");
+//        androidstudio.add("Muhammad Fasial" );
+//        androidstudio.add("Director Customer Support");
+//        androidstudio.add("muhammad.faisal@abc.com");
+//        androidstudio.add("+92-300-745-4342");
+        androidstudio.add(contact);
         List<String> xamarin =new ArrayList<>();
-        xamarin.add("EME NUST ");
+//        xamarin.add("EME NUST ");
+        xamarin.add(add);
 //        xamarin.add("abc2 whatsapp");
 //        xamarin.add("abc2 eme");
 ////        xamarin.add("abc2 eaaa");
@@ -147,16 +154,18 @@ public static  FragmentTransaction ft;
             public void onClick(View v) {
                 String name1 ="You are travelling";
                 currentimages++;
-
-
-                fm = getSupportFragmentManager();
-                ft = fm.beginTransaction();
                 starttaskfrag m23 = new starttaskfrag();
+
+//                fm = getSupportFragmentManager();
+//                ft = fm.beginTransaction();
+//                starttaskfrag m23 = new starttaskfrag();
 //currentimages=currentimages%images.length;
                 // starttravelimge.setImageResource(images[currentimages]);
                 starttravelimge.setImageResource(images[1]);
                 traveltext= starttravel.getText().toString();
                 if(traveltext.compareTo("Start Travel")==0 ) {
+                    fm = getSupportFragmentManager();
+                    ft = fm.beginTransaction();
 
                     locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -181,7 +190,8 @@ public static  FragmentTransaction ft;
                     b1.putString("name", name);
 //                    b1.putString("pwd",pwd);
                     m23.setArguments(b1);
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.addToBackStack(null);
                     ft.add(R.id.fragment_container, m23);
                     ft.commit();
 
@@ -214,8 +224,16 @@ public static  FragmentTransaction ft;
 //                starttravel.setVisibility(v.GONE);
                 }
                 else if (traveltext.compareTo("end travel")==0 )
-                {
+                {                starttravelimge.setImageResource(images[0]);
+
+                    if(f==null) {
+                        fm = getSupportFragmentManager();
+                        ft = fm.beginTransaction();
+                        fm.popBackStack();
+                        ft.remove(m23).commit();
+                    }
 //
+
 //                    Fragment trans = SupportFragmentManager.BeginTransaction();
 //                    trans.remove(m23);
 //                    trans.AddToBackStack(null);
@@ -227,6 +245,9 @@ public static  FragmentTransaction ft;
 //                    ft.remove(m23);
 //                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 //                    ft.commit();
+
+
+
                     locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                     if (!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER))) {
@@ -257,10 +278,13 @@ public static  FragmentTransaction ft;
 
         starttaskimage=findViewById(R.id.image_task);
         starttask=findViewById(R.id.start_task);
+
 //         tasktext= starttask.getText().toString();
         starttask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                starttaskfrag m13= new starttaskfrag();
+                FragmentTransaction ft;
                 tasktext= starttask.getText().toString();
                 if(tasktext.compareTo("Start Task")==0) {
                     String name = "starttime";
@@ -272,15 +296,15 @@ public static  FragmentTransaction ft;
 // starttaskfrag       yourFragment = (starttaskfrag) getSupportFragmentManager()
 //                            .findFragmentById(R.id.yourFragment);
 //                    String name ="starttime"
-                    FragmentTransaction ft;
+
                     fm=getSupportFragmentManager();
                     ft=fm.beginTransaction();
                     Bundle b1 = new Bundle();
-                    starttaskfrag m13= new starttaskfrag();
 
                     b1.putString("name",name);
 //                    b1.putString("pwd",pwd);
                     m13.setArguments(b1);
+                    ft.addToBackStack(null);
                     ft.add(R.id.fragment_container,m13);
                     ft.commit();
 //
@@ -301,7 +325,14 @@ public static  FragmentTransaction ft;
 
                 }
                 else if (tasktext.compareTo("end task")==0)
-                {
+                {  starttaskimage.setImageResource(images[2]);
+
+                    if(f==null) {
+                        fm = getSupportFragmentManager();
+                        ft = fm.beginTransaction();
+                        fm.popBackStack();
+                        ft.remove(m13).commit();
+                    }
                     final Dialog dialog = new Dialog(homeActivity.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.activity_start_travel);
@@ -316,6 +347,7 @@ public static  FragmentTransaction ft;
                     yes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
 
                             database = FirebaseDatabase.getInstance();
                             myRef = database.getReference();
