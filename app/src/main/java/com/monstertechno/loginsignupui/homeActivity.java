@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,11 +50,12 @@ public class homeActivity extends AppCompatActivity {
     private  final long Min_time =1000;
     private final long Min_distance=5;
     public  String DET,contact,add;
+    public  String key;
     private List<String> listDataHeader;
     private HashMap<String,List<String>> listHash;
     public int currentimages;
     public Button yes,no;
-    public DatabaseReference myRef,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11;
+    public DatabaseReference myRef,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15;
     public FirebaseDatabase database;
     public  int variable_no,variable_yes;
     int[] images={R.drawable.beforetravel,R.drawable.duringtravelliing,R.drawable.beforetask,R.drawable.duringtask};
@@ -69,22 +71,17 @@ public static  FragmentTransaction ft;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-//        starttaskfrag m11 = new starttaskfrag();
-//        fm=getSupportFragmentManager();
-//        ft=fm.beginTransaction();
-//        ft.add(R.id.fragment_container,m11);
-//
-//        ft.commit();
+
+
         ActivityCompat.requestPermissions(homeActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},requestloation);
 
-        ////////////////////////////////////
+
         tickettx=findViewById(R.id.tx);
-//        tickettx1=findViewById(R.id.de);
         textView=findViewById(R.id.tx1);
         textView1=findViewById(R.id.tx2);
         Intent i=getIntent();
         String ticketno1= i.getStringExtra("ticket no");
-//        String ticketno1= i.getStringExtra("ticket no");
+
          DET= i.getStringExtra("details");
          Log.v("ali","det " +DET);
         contact= i.getStringExtra("contact");
@@ -92,7 +89,16 @@ public static  FragmentTransaction ft;
         add= i.getStringExtra("address");
         Log.v("ali","contact " +add);
         tickettx.setText(ticketno1);
-//        tickettx1.setText(DET);
+        key= i.getStringExtra("sitekey");
+        Log.v("ali","det " +key);
+
+//        a1= FirebaseDatabase.getInstance().getReference();
+//        a2=a1.child("tasks");
+//        Query query=a2.orderByChild("ticket_no").equalTo(ticketno1);
+
+
+
+
         listView =  findViewById(R.id.exp);
         init();
         listdataadapter= new expandablelist(this,listDataHeader,listHash);
@@ -100,8 +106,8 @@ public static  FragmentTransaction ft;
         onstarttravelclick();
         onstarttaskclick();
 
-//        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
-//        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,PackageManager.PERMISSION_GRANTED);
+
+
 
     }
     private  void init(){
@@ -140,8 +146,7 @@ public static  FragmentTransaction ft;
         listHash.put(listDataHeader.get(0),emdtdev);
         listHash.put(listDataHeader.get(1),androidstudio);
         listHash.put(listDataHeader.get(2),xamarin);
-//        listHash.put(listDataHeader.get(3),ump);
-        /////////////////
+
 
 
     }
@@ -156,18 +161,14 @@ public static  FragmentTransaction ft;
                 currentimages++;
                 starttaskfrag m23 = new starttaskfrag();
 
-//                fm = getSupportFragmentManager();
-//                ft = fm.beginTransaction();
-//                starttaskfrag m23 = new starttaskfrag();
-//currentimages=currentimages%images.length;
-                // starttravelimge.setImageResource(images[currentimages]);
+
                 starttravelimge.setImageResource(images[1]);
                 traveltext= starttravel.getText().toString();
                 if(traveltext.compareTo("Start Travel")==0 ) {
                     fm = getSupportFragmentManager();
                     ft = fm.beginTransaction();
 
-                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); //start travel location
 
                     if (!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER))) {
 
@@ -177,51 +178,23 @@ public static  FragmentTransaction ft;
                     }
                     database = FirebaseDatabase.getInstance();
                     myRef = database.getReference();
-                    a1 = myRef.child("start longITUDE");
+                    a1 = myRef.child("tasks").child(key).child("start travel longITUDE");
                     a1.setValue(longitude);
-                    a2 = myRef.child("start lattitude");
+                    a2 = myRef.child("tasks").child(key).child("start travel  lattitude");
                     a2.setValue(lattitude);
                     String name = "starttravel";
-//                    FragmentTransaction ft;
-//                    fm = getSupportFragmentManager();
-//                    ft = fm.beginTransaction();
+
                     Bundle b1 = new Bundle();
-//                    starttaskfrag m23 = new starttaskfrag();
                     b1.putString("name", name);
-//                    b1.putString("pwd",pwd);
                     m23.setArguments(b1);
-//                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.addToBackStack(null);
                     ft.add(R.id.fragment_container, m23);
                     ft.commit();
 
-                    //////////////////////
-//                fm=getSupportFragmentManager();
-////
-//                ft=fm.beginTransaction();
-//                starttaskfrag m13 = new starttaskfrag();
-//                getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.HomeFragment));
-//                starttaskfra.t1.setText("you are travelling");
-//                textView1.setBackgroundColor("@co");
-//                Bundle b1 = new Bundle();
-//                starttaskfrag m13= new starttaskfrag();
-//                b1.putString("name",name1);
-//                m13.setArguments(b1);
-//                ft.add(R.id.fragment_container,m13);
-////
-//                ft.commit();
-//                starttaskfrag starttaskfra = new starttaskfrag();
-//                fm=getSupportFragmentManager();
-//
-//                ft=fm.beginTransaction();
-////                starttaskfra.t1.setText("your are travelling");
-//                ft.add(R.id.fragment_container,starttaskfra);
 
-//                ft.commit();
                     starttravel.setText("end travel");
                     boolb1=1;
 
-//                starttravel.setVisibility(v.GONE);
                 }
                 else if (traveltext.compareTo("end travel")==0 )
                 {                starttravelimge.setImageResource(images[0]);
@@ -234,21 +207,10 @@ public static  FragmentTransaction ft;
                     }
 //
 
-//                    Fragment trans = SupportFragmentManager.BeginTransaction();
-//                    trans.remove(m23);
-//                    trans.AddToBackStack(null);
-//                    trans.Commit();
-//                    popBackStack(getSupportFragmentManager());
-//                {  getFragmentManager().beginTransaction().remove(m23).commit();
-//                    getSupportFragmentManager().popBackStack();
-//                    findNavController().popBackStack()
-//                    ft.remove(m23);
-//                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-//                    ft.commit();
 
 
 
-                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); // location end travel
 
                     if (!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER))) {
 
@@ -258,12 +220,13 @@ public static  FragmentTransaction ft;
                     }
                     database = FirebaseDatabase.getInstance();
                     myRef = database.getReference();
-                    a8 = myRef.child("end longITUDE");
+                    a8 = myRef.child("tasks").child(key).child("end travel longITUDE");
                     a8.setValue(longitude);
-                    a10 = myRef.child(" end lattitude");
+                    a10 = myRef.child("tasks").child(key).child(" end travel lattitude");
                     a10.setValue(lattitude);
-//                    starttaskfrag m23 = new starttaskfrag();
                     boolb1=0;
+                    starttravel.setVisibility(v.INVISIBLE);
+
                 }
 
             }
@@ -274,60 +237,61 @@ public static  FragmentTransaction ft;
     public void onstarttaskclick()
     {
 
-//        View view;
 
         starttaskimage=findViewById(R.id.image_task);
         starttask=findViewById(R.id.start_task);
 
-//         tasktext= starttask.getText().toString();
         starttask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                starttaskfrag m13= new starttaskfrag();
+                starttaskfrag m13 = new starttaskfrag();
                 FragmentTransaction ft;
-                tasktext= starttask.getText().toString();
-                if(tasktext.compareTo("Start Task")==0) {
+                tasktext = starttask.getText().toString();
+                if (tasktext.compareTo("Start Task") == 0) {
                     String name = "starttime";
                     currentimages++;
-//currentimages=currentimages%images.length;
-                    // starttravelimge.setImageResource(images[currentimages]);
-                    starttaskimage.setImageResource(images[3]);
-//                    startcountingtraveltime();
-// starttaskfrag       yourFragment = (starttaskfrag) getSupportFragmentManager()
-//                            .findFragmentById(R.id.yourFragment);
-//                    String name ="starttime"
 
-                    fm=getSupportFragmentManager();
-                    ft=fm.beginTransaction();
+                    starttaskimage.setImageResource(images[3]);
+                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); ///location start task
+
+                    if (!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER))) {
+
+                        ongps();
+                    } else {
+                        getlocation();
+                    }
+
+                    database = FirebaseDatabase.getInstance();
+                    myRef = database.getReference();
+
+                    a11 = myRef.child("tasks").child(key).child("start task longITUDE");
+                    a11.setValue(longitude);
+                    a12 = myRef.child("tasks").child(key).child(" start task lattitude");
+                    a12.setValue(lattitude);
+
+
+
+
+
+
+                    fm = getSupportFragmentManager();
+                    ft = fm.beginTransaction();
                     Bundle b1 = new Bundle();
 
-                    b1.putString("name",name);
+                    b1.putString("name", name);
 //                    b1.putString("pwd",pwd);
                     m13.setArguments(b1);
                     ft.addToBackStack(null);
-                    ft.add(R.id.fragment_container,m13);
+                    ft.add(R.id.fragment_container, m13);
                     ft.commit();
-//
-//                    Log.d("dontknowitwillowrk", yourFragment.t1
-//                            .getText().toString());
-//                    yourFragment.t1.setText("hello mister how do you do");
-//                    ft = fm.beginTransaction();
-//                starttaskfrag m13 = new starttaskfrag();
-//                getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.HomeFragment));
-//                starttaskfra.t1.setText("you are travelling");
-//                textView1.setBackgroundColor("@co");
-//                    Bundle b1 = new Bundle();
-//                    starttaskfrag m13 = new starttaskfrag();
-//                    b1.putString("name", name);
-//                    m13.setArguments(b1);
+
 
                     starttask.setText("end task");
 
-                }
-                else if (tasktext.compareTo("end task")==0)
-                {  starttaskimage.setImageResource(images[2]);
+                } else if (tasktext.compareTo("end task") == 0) {
+                    starttaskimage.setImageResource(images[2]);
 
-                    if(f==null) {
+                    if (f == null) {
                         fm = getSupportFragmentManager();
                         ft = fm.beginTransaction();
                         fm.popBackStack();
@@ -342,8 +306,8 @@ public static  FragmentTransaction ft;
                     lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
                     lp.gravity = Gravity.CENTER;
                     dialog.getWindow().setAttributes(lp);
-                    yes  =dialog.findViewById(R.id.finishyes);
-                    no =  dialog.findViewById(R.id.finishno);
+                    yes = dialog.findViewById(R.id.finishyes);
+                    no = dialog.findViewById(R.id.finishno);
                     yes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -351,14 +315,13 @@ public static  FragmentTransaction ft;
 
                             database = FirebaseDatabase.getInstance();
                             myRef = database.getReference();
-                            a6=myRef.child("task completed");
-                            a7=a6.child("yes");
-                            a7.setValue("Task is   completed");
-//         variable_yes=1;
-//        a4=myRef.child("yesbutton");
-//        a4.setValue(variable_yes);
+                            a6 = myRef.child("tasks").child(key).child("task completed");
+//                            a7 = a6.child("yes");
+                            a6.setValue("Task is   completed");
 
-                            Toast.makeText(homeActivity.this,"task completed",Toast.LENGTH_SHORT).show();;
+
+                            Toast.makeText(homeActivity.this, "task completed", Toast.LENGTH_SHORT).show();
+                            ;
 
                         }
                     });
@@ -367,34 +330,32 @@ public static  FragmentTransaction ft;
                         public void onClick(View v) {
                             database = FirebaseDatabase.getInstance();
                             myRef = database.getReference();
-                            a6=myRef.child("task completed");
-//                            a4=myRef.child("task completed");
-                            a5=a6.child("No");
-                            a5.setValue("Task is  not completed");
-//                            dialog.variable_no=0;
-//                             a3=myRef.child("Nobutton");
-////                             a3.setValue(variable_no);
+                            a6 = myRef.child("tasks").child(key).child("task completed");
+//                            a5 = a6.child("No");
+                            a6.setValue("Task is  not completed");
 
-                            Toast.makeText(homeActivity.this,"task is not completed",Toast.LENGTH_SHORT).show();;
+
+                            Toast.makeText(homeActivity.this, "task is not completed", Toast.LENGTH_SHORT).show();
+                            ;
 
                         }
                     });
-                    Button submit=dialog.findViewById(R.id.subbmitbutton);
+                    Button submit = dialog.findViewById(R.id.subbmitbutton);
                     submit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            EditText commit=dialog.findViewById(R.id.committext);
-                            String C= commit.getText().toString();
+                            EditText commit = dialog.findViewById(R.id.committext);
+                            String C = commit.getText().toString();
                             database = FirebaseDatabase.getInstance();
                             myRef = database.getReference();
-                            a3=myRef.child("committext");
-                            a3.setValue(C);
-//                            a3.removeValue();
+
+//                            a3 = myRef.child(key).child("comment");
+                            myRef.child("tasks").child(key).child("commint").setValue(C);
                             commit.setText(" ");
                         }
                     });
 
-                    ImageView cancel=dialog.findViewById(R.id.canceldiaglouge);
+                    ImageView cancel = dialog.findViewById(R.id.canceldiaglouge);
                     cancel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -405,128 +366,34 @@ public static  FragmentTransaction ft;
 
                     dialog.show();
 
-                    Toast.makeText(homeActivity.this,"end task",Toast.LENGTH_SHORT).show();;
+                    Toast.makeText(homeActivity.this, "end task", Toast.LENGTH_SHORT).show();
+
+                    locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); ///location end task
+
+                    if (!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER))) {
+
+                        ongps();
+                    } else {
+                        getlocation();
+                    }
+
+                    database = FirebaseDatabase.getInstance();
+                    myRef = database.getReference();
+                    a13 = myRef.child("tasks").child(key).child("end task longITUDE");
+                    a13.setValue(longitude);
+                    a14 = myRef.child("tasks").child(key).child(" end task lattitude");
+                    a14.setValue(lattitude);
+
+
+
+
+                    ;
                 }
 
-//                FragmentTransaction ft;
-//                fm=getSupportFragmentManager();
-//                ft=fm.beginTransaction();
-//                Bundle b1 = new Bundle();
-////                starttaskfrag m13= new starttaskfrag();
-////                b1.putString("name",name);
-//
-//                m13.setArguments(b1);
-//                ft.add(R.id.fragment_container,m13);
-//                ft.commit();
-//                locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
-//                if(!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)))
-//                {
-//
-//                    ongps();
-//                }
-//                else
-//                {getlocation();}
 
-
-////////////////////////////////////////////////
-//                locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
-//                if(!(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)))
-//                {
-//
-//                    ongps();
-//                }
-//                else
-//                {getlocation();}
-
-//                              locationListener=new LocationListener() {
-//                    @RequiresApi(api = Build.VERSION_CODES.DONUT)
-//                    @Override
-//                    public void onLocationChanged(Location location) {
-//                        try {
-//                            latLng=new LatLng(location.getLatitude(),location.getLongitude());
-////                            Geocoder geocoder = new Geocoder(getApplicationContext());
-//                            double mylattitude=location.getLatitude();
-//                            TextView lattitudetxt = findViewById(R.id.tx1);
-//                            lattitudetxt.setText(("lattitude is " + mylattitude));
-//                            double mylongitude = location.getLongitude();
-//                            TextView longitutudetext = findViewById(R.id.tx2);
-//                            longitutudetext.setText("longitude is " +mylongitude);
-//                            Log.v("ali" , "value shhh " + mylattitude);
-//                            Log.v("ali" , "value" + mylongitude);
-//                            List<Address> addresses= geocoder.getFromLocation(mylattitude,mylongitude,1);
-//           String str= addresses.get(0).getCountryName() + " ";
-//           str += addresses.get(0).getLocality() + " ";
-//           str += addresses.get(0).getSubLocality() + " ";
-//           str += addresses.get(0).getThoroughfare() + " ";
-//                            String     str = addresses.get(0).getAddressLine(0) + " ";
-
-//                            mMap.addMarker(new MarkerOptions().position(latLng).title(str));
-//                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                // send msg
-//            String phonenumber="923320903739";
-//            String mylattitude=String.valueOf(location.getAltitude());
-//            String mylongitude=String.valueOf(location.getLongitude());
-//            String message="lattitude =" + mylattitude + "longitude = " + mylongitude;
-//            SmsManager smsManager= SmsManager.getDefault();
-//            smsManager.sendTextMessage(null,
-//                    phonenumber,message,null,null);
-//            Log.v(TAG, "index=" + mylattitude);
-//            Log.d(MapsActivity.this,"lattitude" + fi.get);
-                ////
-//
-//            mDatabase = FirebaseDatabase.getInstance().getReference();
-//            siteRef = mDatabase.child("sites");
-//            siteRef.setValue("a11");
-//            FirebaseDatabase.getInstance().getReference().setValue(fi).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                @Override
-//                public void onComplete(@NonNull Task<Void> task) {
-//                    if(task.isSuccessful()){
-//                        Toast.makeText(MapsActivity.this,"location saved",Toast.LENGTH_SHORT).show();
-//                    }
-//                    else
-//                    { Toast.makeText(MapsActivity.this,"location not saved",Toast.LENGTH_SHORT).show();}
-//
-//                }
-//            });
 
 
             }
-
-//
-//                        catch (Exception e)
-//                        {e.printStackTrace();}
-//                    }
-//
-//                    @Override
-//                    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onProviderEnabled(String provider) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onProviderDisabled(String provider) {
-//
-//                    }
-//                };
-//                locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
-//                try{locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,Min_time,Min_distance,locationListener);
-//                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,Min_time,Min_distance,locationListener);
-//                }
-//                catch (SecurityException
-//                        e)
-//                {e.printStackTrace();}
-//
-//            }
-
-
-
-
-
-
 
 
 
@@ -545,7 +412,6 @@ public static  FragmentTransaction ft;
                 Toast.makeText(homeActivity.this, "positive button", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
-                //builder.finish();
             }
         });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -556,8 +422,7 @@ public static  FragmentTransaction ft;
             }
         });
         final   AlertDialog alert = builder.create();
-        //Setting the title manually
-        //alert.setTitle("AlertDialogExample");
+
         alert.show();
     }
     public void getlocation()
@@ -574,7 +439,6 @@ public static  FragmentTransaction ft;
             Location loationnetwok=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             Location  locationpassive = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             if(locationgps != null){
-//            latLng=new LatLng(locationgps.getLatitude(),locationgps.getLongitude());
                 double longi = locationgps.getLatitude();
                 double latti = locationgps.getLongitude();
                 longitude = String.valueOf(longi);
@@ -597,7 +461,6 @@ public static  FragmentTransaction ft;
 
             }
             else if (locationpassive != null){
-                //                latLng=new LatLng(locationpassive.getLatitude(),locationpassive.getLongitude());
                 double longi = locationpassive.getLatitude();
                 double latti = locationpassive.getLongitude();
                 longitude = String.valueOf(longi);

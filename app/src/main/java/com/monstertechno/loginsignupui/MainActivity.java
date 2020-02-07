@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     EditText emailid,password;
     FloatingActionButton btnsignin;
     TextView tvsignup;
-   public static  String email,pass;
+    public static  String email,pass;
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     @Override
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         btnsignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 email = emailid.getText().toString();
-                 pass=password.getText().toString();
+                email = emailid.getText().toString();
+                pass=password.getText().toString();
                 if(email.isEmpty())
                 {
                     emailid.setError("enter email");
@@ -112,7 +112,5 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void OpenSignupPage(View view) {
-//        startActivity(new Intent(MainActivity.this,SignupActivity.class));
-//    }
+
 }

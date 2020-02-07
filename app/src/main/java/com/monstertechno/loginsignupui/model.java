@@ -7,12 +7,21 @@ public class model {
     public String details;
     public String address;
     public String contact_person;
+    public String key;
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getDetails() {
