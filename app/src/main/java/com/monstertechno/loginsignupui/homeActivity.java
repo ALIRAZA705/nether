@@ -1,5 +1,6 @@
 package com.monstertechno.loginsignupui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,9 +29,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +45,7 @@ public class homeActivity extends AppCompatActivity {
     private expandablelist listdataadapter;
     Button showlocation;
     String tasktext,traveltext;
-    TextView textView,textView1,tickettx,tickettx1;
+    TextView textView,textView1,tickettx,tickettx1,status;
     private  static  final int requestloation =1;
     LocationManager locationManager;
     String lattitude,longitude;
@@ -49,7 +53,7 @@ public class homeActivity extends AppCompatActivity {
 
     private  final long Min_time =1000;
     private final long Min_distance=5;
-    public  String DET,contact,add;
+    public  String DET,contact,add,homesat;
     public  String key;
     private List<String> listDataHeader;
     private HashMap<String,List<String>> listHash;
@@ -75,7 +79,7 @@ public static  FragmentTransaction ft;
 
         ActivityCompat.requestPermissions(homeActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},requestloation);
 
-
+        status=findViewById(R.id.status);
         tickettx=findViewById(R.id.tx);
         textView=findViewById(R.id.tx1);
         textView1=findViewById(R.id.tx2);
@@ -91,7 +95,9 @@ public static  FragmentTransaction ft;
         tickettx.setText(ticketno1);
         key= i.getStringExtra("sitekey");
         Log.v("ali","det " +key);
-
+        homesat= i.getStringExtra("sat");
+        Log.v("ali status","homesat " +homesat);
+        status.setText(homesat);
 //        a1= FirebaseDatabase.getInstance().getReference();
 //        a2=a1.child("tasks");
 //        Query query=a2.orderByChild("ticket_no").equalTo(ticketno1);
@@ -352,6 +358,21 @@ public static  FragmentTransaction ft;
 //                            a3 = myRef.child(key).child("comment");
                             myRef.child("tasks").child(key).child("commint").setValue(C);
                             commit.setText(" ");
+                            myRef.child("tasks").child(key).child("status").setValue("done");
+                            myRef.child("tasks").child(key).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String homstatus = dataSnapshot.child("status").getValue().toString();
+                                    Log.v("ali","det " +homstatus);
+                                    status.setText(homstatus);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                         }
                     });
 

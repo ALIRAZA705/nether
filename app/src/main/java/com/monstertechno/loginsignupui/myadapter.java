@@ -57,7 +57,8 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
         intent.putExtra("address",modl.get(position).getAddress());
         intent.putExtra("details",modl.get(position).getDetails());
         intent.putExtra("sitekey",modl.get(position).getKey());
-//        Log.v("ali","deta " +holder)
+        intent.putExtra("sat",modl.get(position).getStatus());
+//        Log.v("ali","deta " +holder);
         v.getContext().startActivity(intent);
 //        startActivity(new Intent(myadapter.this,homac.class));
     }

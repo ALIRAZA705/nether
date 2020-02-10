@@ -2,6 +2,7 @@ package com.monstertechno.loginsignupui;
 
 public class model {
     public String ticket_no;
+    public  String status;
     public String location;
     public String email;
     public String details;
@@ -14,6 +15,14 @@ public class model {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getKey() {
