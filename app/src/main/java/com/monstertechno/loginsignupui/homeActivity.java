@@ -10,11 +10,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -29,12 +31,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +58,18 @@ public class homeActivity extends AppCompatActivity {
     LocationManager locationManager;
     String lattitude,longitude;
     int boolb1=0, boolb2=0;
+    private static final int PICK_IMAGE_REQUEST = 234;
+    private static final int PICK_PDF_REQUEST = 235;
+    private static final int PICK_DOC_REQUEST = 236;
+    //Buttons
+    private Button buttonChoose;
+    private Button buttonUpload,buttonpdfupload,buttondocupload;
 
+    //ImageView
+    private ImageView imageView;
+    private StorageReference storageReference;
+    //a Uri object to store file path
+    private Uri filePath;
     private  final long Min_time =1000;
     private final long Min_distance=5;
     public  String DET,contact,add,homesat;
@@ -111,6 +130,71 @@ public static  FragmentTransaction ft;
         listView.setAdapter(listdataadapter);
         onstarttravelclick();
         onstarttaskclick();
+        ///////////////////////////////////
+        Button upload= findViewById(R.id.upload);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(homeActivity.this,"button is clicked",Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(homeActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.uploadxml);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                    lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                lp.gravity = Gravity.CENTER;
+                dialog.getWindow().setAttributes(lp);
+//        yes = dialog.findViewById(R.id.buttonChoose);
+//        no = dialog.findViewById(R.id.finishno);
+                storageReference = FirebaseStorage.getInstance().getReference();
+                //getting views from layout
+                buttonChoose =  dialog.findViewById(R.id.buttonChoose);
+                buttonUpload =  dialog.findViewById(R.id.buttonUpload);
+                buttonpdfupload =  dialog.findViewById(R.id.pdfbutton);
+
+                imageView =  dialog.findViewById(R.id.imageView);
+
+                //attaching listener
+                buttonChoose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+
+                    }
+                });
+//                buttonUpload.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        uploadFile();
+//                    }
+//                });
+                buttonpdfupload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setType("application/pdf/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_PDF_REQUEST);
+                        uploadFile();
+                    }
+                });
+                ImageView cancel = dialog.findViewById(R.id.canceldiaglouge1);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.show();
+
+            }
+
+        });
 
 
 
@@ -152,9 +236,89 @@ public static  FragmentTransaction ft;
         listHash.put(listDataHeader.get(0),emdtdev);
         listHash.put(listDataHeader.get(1),androidstudio);
         listHash.put(listDataHeader.get(2),xamarin);
+        /////////
 
 
 
+
+
+    }
+    private void uploadFile() {
+
+
+        //if there is a file to upload
+        if (filePath != null) {
+            //displaying a progress dialog while upload is going on
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+            StorageReference riversRef = storageReference.child("images/pic.jpg");
+            riversRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //if the upload is successfull
+                            //hiding the progress dialog
+                            String Uri =taskSnapshot.getUploadSessionUri().toString();
+                            DatabaseReference a1=FirebaseDatabase.getInstance().getReference();
+                            DatabaseReference a2  =   a1.child("tasks").child(key).child("doc");
+//a1.setValue(Uri);
+                            String uploadId = a2.push().getKey();
+                            a2.child(uploadId).setValue(Uri);
+                            progressDialog.dismiss();
+
+                            //and displaying a success toast
+                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //if the upload is not successfull
+                            //hiding the progress dialog
+                            progressDialog.dismiss();
+
+                            //and displaying error message
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //calculating progress percentage
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                            //displaying percentage in progress dialog
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+                    });
+        }
+        //if there is not any file
+        else {
+            //you can display an error toast
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            uploadFile();
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+//                imageView.setImageBitmap(bitmap);
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        }
+        else if (requestCode == PICK_PDF_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null)
+        {
+
+            filePath = data.getData();
+            uploadFile();
+//            uploadFile();
+        }
     }
     public void onstarttravelclick()
     {

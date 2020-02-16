@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:48245803553:android:fce92e2636556f934d7160",
+        "mobilesdk_app_id": "1:48245803553:android:e9202f5f515f88584d7160",
         "android_client_info": {
           "package_name": "com.monstertechno.loginsignupui"
         }
@@ -20,14 +20,6 @@
           "android_info": {
             "package_name": "com.monstertechno.loginsignupui",
             "certificate_hash": "6c2c8024ca56d57e5a0428632cd9c937e1e5321d"
-          }
-        },
-        {
-          "client_id": "48245803553-hdoevgujja5tgo01inan84c5ok6l4g3j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.monstertechno.loginsignupui",
-            "certificate_hash": "c64f668f8453693c2be5a672b5c884922171c212"
           }
         },
         {
